@@ -23,8 +23,8 @@ class ClockFragment : Fragment() {
 
         viewModel = ClockViewModel()
 
-        val clockObserver = Observer<Long> { timer ->
-            clock.text = timer.toString()
+        val clockObserver = Observer<String> { timer ->
+            clock.text = timer
         }
 
         viewModel.timeLeftInMillis.observe(this, clockObserver)
