@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -19,8 +20,6 @@ class ClockFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
         viewModel = ClockViewModel()
 
         val clockObserver = Observer<String> { timer ->
@@ -36,7 +35,22 @@ class ClockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         start_button.setOnClickListener {
-            viewModel.startStop()
+
+            if (viewModel.timerRunning) {
+                start_button.setImageResource(R.drawable.ic_play)
+            }
+
+            else if (!viewModel.timerRunning) {
+                start_button.setImageResource(R.drawable.ic_pause)
+            }
+
+            viewModel.startPauseClock()
+        }
+
+        stop_button.setOnClickListener {
+            viewModel.stopClock()
+            start_button.setImageResource(R.drawable.ic_play)
+            clock.text = "25:00"
         }
 
         clock.text = "25:00"

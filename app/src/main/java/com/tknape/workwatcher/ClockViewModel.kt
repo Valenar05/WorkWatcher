@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import kotlin.concurrent.timer
 
 class ClockViewModel: ViewModel() {
 
@@ -21,13 +22,19 @@ class ClockViewModel: ViewModel() {
     var timerRunning = false
     private var isTimerInitialized = false
 
-    fun startStop() {
-        if (isTimerInitialized) {
-            stopTimer()
+    fun startPauseClock() {
+
+        if (!timerRunning && isTimerInitialized ) {
+            resumeTimer()
+            Log.d("Timer", "Resuming timer")
+        }
+
+        else if (timerRunning && isTimerInitialized) {
+            pauseTimer()
             Log.d("Timer", "Stopping timer")
             Log.d("Timer", mutableTimeLeftInMillis.value.toString())
-
         }
+
         else {
             startTimer()
             Log.d("Timer", "Starting timer")
@@ -36,20 +43,38 @@ class ClockViewModel: ViewModel() {
         }
     }
 
-    private fun startTimer() {
-        mutableTimeLeftInMillis.value = 1500000L
+    fun stopClock() {
+        stopTimer()
+    }
+
+    private fun createTimer(): CountDownTimer {
         countDownTimer = object: CountDownTimer(mutableTimeLeftInMillis.value!!, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 mutableTimeLeftInMillis.value = millisUntilFinished
-
             }
-
             override fun onFinish() {
             }
-        }.start()
+        }
+        return countDownTimer
+    }
+
+    private fun startTimer() {
+        mutableTimeLeftInMillis.value = 1500000L
+        createTimer().start()
+
         isTimerInitialized = true
         timerRunning = true
+    }
+
+    private fun resumeTimer() {
+        createTimer().start()
+        timerRunning = true
+    }
+
+    private fun pauseTimer() {
+        countDownTimer.cancel()
+        timerRunning = false
     }
 
     private fun stopTimer() {
