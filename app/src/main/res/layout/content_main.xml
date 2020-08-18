@@ -12,7 +12,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:cpb_background_progressbar_width="14dp"
-        app:cpb_progress="40"
+        app:cpb_progress="0"
         app:cpb_progressbar_width="14dp"
         app:cpb_round_border="true"
         app:layout_constraintBottom_toTopOf="@+id/start_button"

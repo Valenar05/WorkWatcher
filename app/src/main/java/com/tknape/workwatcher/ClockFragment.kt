@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -17,8 +16,8 @@ class ClockFragment : Fragment() {
     private lateinit var viewModel: ClockViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewModel = ClockViewModel()
 
@@ -26,8 +25,14 @@ class ClockFragment : Fragment() {
             clock.text = timer
         }
 
-        viewModel.timeLeftInMillis.observe(this, clockObserver)
-        
+        viewModel.formattedTimeLeftInMillis.observe(this, clockObserver)
+
+        val progressObserver = Observer<Float> { progressPercentage ->
+            circularProgressBar.progress = progressPercentage
+        }
+
+        viewModel.timerProgressInPercents.observe(this, progressObserver)
+
         return inflater.inflate(R.layout.content_main, container, false)
     }
 
@@ -39,7 +44,6 @@ class ClockFragment : Fragment() {
             if (viewModel.timerRunning) {
                 start_button.setImageResource(R.drawable.ic_play)
             }
-
             else if (!viewModel.timerRunning) {
                 start_button.setImageResource(R.drawable.ic_pause)
             }
