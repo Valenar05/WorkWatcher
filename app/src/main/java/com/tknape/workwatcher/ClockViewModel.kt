@@ -6,21 +6,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.tknape.workwatcher.Clock.Clock
 
 class ClockViewModel : ViewModel() {
 
-    lateinit var countDownTimer: CountDownTimer
-    var timerRunning = false
-    private var isTimerInitialized = false
-    val workPeriodInMillis = 1500000L
-
+    private lateinit var clock: Clock
     private val mutableTimeLeftInMillis: MutableLiveData<Long> by lazy {
         MutableLiveData<Long>()
     }
 
+    val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
+
     val timerProgressInPercents: LiveData<Float> =
         Transformations.map(mutableTimeLeftInMillis) { timeLeft ->
-            (100 - (timeLeft.toFloat() / workPeriodInMillis.toFloat() * 100))
+            (100 - (timeLeft.toFloat() / Clock.workPeriodInMillis.toFloat() * 100))
         }
 
     val formattedTimeLeftInMillis : LiveData<String> = Transformations.map(mutableTimeLeftInMillis) { time ->
@@ -29,64 +28,35 @@ class ClockViewModel : ViewModel() {
 
     fun startPauseClock() {
 
-        if (!timerRunning && isTimerInitialized) {
-            resumeTimer()
+        if (!this::clock.isInitialized) {
+            clock = Clock(this)
+        }
+
+        if (!Clock.timerRunning && Clock.isTimerInitialized) {
+            clock.resumeTimer()
             Log.d("Timer", "Resuming timer")
         }
-        else if (timerRunning && isTimerInitialized) {
-            pauseTimer()
+        else if (Clock.timerRunning && Clock.isTimerInitialized) {
+            clock.pauseTimer()
             Log.d("Timer", "Stopping timer")
             Log.d("Timer", mutableTimeLeftInMillis.value.toString())
         }
         else {
-            startTimer()
+            clock.startTimer()
             Log.d("Timer", "Starting timer")
             Log.d("Timer", mutableTimeLeftInMillis.value.toString())
         }
     }
 
     fun stopClock() {
-        stopTimer()
+        clock.stopTimer()
     }
 
-    private fun createTimer(): CountDownTimer {
-        countDownTimer = object : CountDownTimer(mutableTimeLeftInMillis.value!!, 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
-                mutableTimeLeftInMillis.value = millisUntilFinished
-            }
-
-            override fun onFinish() {
-            }
-        }
-        return countDownTimer
+    fun setTimeLeftInMillis(time: Long) {
+        mutableTimeLeftInMillis.value = time
     }
 
-    private fun startTimer() {
-        mutableTimeLeftInMillis.value = workPeriodInMillis
-        createTimer().start()
-
-        isTimerInitialized = true
-        timerRunning = true
+    fun isTimerRunning(): Boolean {
+        return Clock.timerRunning
     }
-
-    private fun resumeTimer() {
-        createTimer().start()
-
-        timerRunning = true
-    }
-
-    private fun pauseTimer() {
-        countDownTimer.cancel()
-
-        timerRunning = false
-    }
-
-    private fun stopTimer() {
-        countDownTimer.cancel()
-
-        isTimerInitialized = false
-        timerRunning = false
-    }
-
 }

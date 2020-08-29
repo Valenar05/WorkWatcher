@@ -41,10 +41,10 @@ class ClockFragment : Fragment() {
 
         start_button.setOnClickListener {
 
-            if (viewModel.timerRunning) {
+            if (viewModel.isTimerRunning()) {
                 start_button.setImageResource(R.drawable.ic_play)
             }
-            else if (!viewModel.timerRunning) {
+            else if (!viewModel.isTimerRunning()) {
                 start_button.setImageResource(R.drawable.ic_pause)
             }
 
