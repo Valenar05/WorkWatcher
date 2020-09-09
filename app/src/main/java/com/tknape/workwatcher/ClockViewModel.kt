@@ -25,11 +25,12 @@ class ClockViewModel : ViewModel(), IClockViewModel {
         "${if (time / 60000 < 10) {"0"} else {""}}${time / 60000}:${if((time % 60000) / 1000 < 10) {"0"} else {""}}${(time % 60000) / 1000}" //TODO make string formatting more readable
     }
 
-    override fun startPauseClock() {
+    init {
+        clock = Clock(this)
+        setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
+    }
 
-        if (this::clock.isInitialized == false) {
-            clock = Clock(this)
-        }
+    override fun startPauseClock() {
 
         if (!Clock.timerRunning && Clock.isTimerInitialized) {
             clock.resumeTimer()
