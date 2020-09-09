@@ -54,11 +54,10 @@ class ClockFragment : Fragment() {
         stop_button.setOnClickListener {
             viewModel.stopClock()
             start_button.setImageResource(R.drawable.ic_play)
-            clock.text = "25:00"
         }
 
-        clock.text = "25:00"
-
+        skip_to_next_button.setOnClickListener {
+            viewModel.skipToNextSession()
+        }
     }
-
 }

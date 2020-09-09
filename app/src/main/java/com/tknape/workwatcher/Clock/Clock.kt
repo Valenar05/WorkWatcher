@@ -1,11 +1,13 @@
 package com.tknape.workwatcher.Clock
 
 import android.os.CountDownTimer
-import com.tknape.workwatcher.ClockViewModel
+import com.tknape.workwatcher.IClockViewModel
 
-class Clock(val viewModel: ClockViewModel) {
+class Clock(val viewModel: IClockViewModel) {
 
 
+    val cycleHandler = CycleHandler()
+    var sessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
 
     lateinit var countDownTimer: CountDownTimer
 
@@ -17,13 +19,17 @@ class Clock(val viewModel: ClockViewModel) {
             }
 
             override fun onFinish() {
+                cycleHandler.switchToNextSession()
+                timerRunning = false
+                isTimerInitialized = false
+                updateSessionDuration()
             }
         }
         return countDownTimer
     }
 
     fun startTimer() {
-        viewModel.setTimeLeftInMillis(workPeriodInMillis)
+        viewModel.setTimeLeftInMillis(sessionDurationInMillis)
         createTimer().start()
 
         isTimerInitialized = true
@@ -42,15 +48,31 @@ class Clock(val viewModel: ClockViewModel) {
         timerRunning = false
     }
 
+    fun skipToNextSession() {
+        countDownTimer.cancel()
+        cycleHandler.switchToNextSession()
+        timerRunning = false
+        isTimerInitialized = false
+        updateSessionDuration()
+    }
+
     fun stopTimer() {
         countDownTimer.cancel()
+        cycleHandler.resetSessionNumber()
 
         isTimerInitialized = false
         timerRunning = false
     }
 
+    fun isCountDownTimerInitialized(): Boolean {
+        return this::countDownTimer.isInitialized
+    }
+
+    private fun updateSessionDuration() {
+        sessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
+    }
+
     companion object {
-        val workPeriodInMillis: Long = 1500000L
         var timerRunning = false
         var isTimerInitialized = false
 
