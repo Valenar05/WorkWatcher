@@ -29,6 +29,7 @@ class Clock(val viewModel: IClockViewModel) {
     }
 
     fun startTimer() {
+        updateSessionDuration()
         viewModel.setTimeLeftInMillis(sessionDurationInMillis)
         createTimer().start()
 
