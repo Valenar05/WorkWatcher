@@ -1,21 +1,41 @@
 package com.tknape.workwatcher.Clock
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 
 class CycleHandler {
 
-    private var currentSessionNumber = 1
+    private val mutableCurrentSessionNumber: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 
-    private fun getSessionCycle(): Int {
-        return currentSessionNumber % 8
+    val currentSessionNumber: LiveData<Int> = mutableCurrentSessionNumber
+
+    val currentSessionCycle: LiveData<Int> =
+        Transformations.map(mutableCurrentSessionNumber) { sessionNumber ->
+            sessionNumber % 8
+        }
+
+    init {
+        mutableCurrentSessionNumber.value = 1
+    }
+
+    fun getSessionCycle(): Int {
+        val x = currentSessionNumber.value
+        val currentSessionCycle = x!! % 8
+        return currentSessionCycle
     }
 
     fun resetSessionNumber() {
-        currentSessionNumber = 1
+        mutableCurrentSessionNumber.value = 1
     }
 
     fun switchToNextSession() {
-        currentSessionNumber++
+        val oldSessionNumber = currentSessionNumber.value
+        val newSessionNumber = oldSessionNumber!!.plus(1)
+        mutableCurrentSessionNumber.value = newSessionNumber
     }
 
     fun getCycleLengthInMillis(): Long {

@@ -7,7 +7,7 @@ class Clock(val viewModel: IClockViewModel) {
 
 
     val cycleHandler = CycleHandler()
-    var sessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
+    var totalSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
 
     lateinit var countDownTimer: CountDownTimer
 
@@ -22,15 +22,15 @@ class Clock(val viewModel: IClockViewModel) {
                 cycleHandler.switchToNextSession()
                 timerRunning = false
                 isTimerInitialized = false
-                updateSessionDuration()
+                updateTotalSessionDuration()
             }
         }
         return countDownTimer
     }
 
     fun startTimer() {
-        updateSessionDuration()
-        viewModel.setTimeLeftInMillis(sessionDurationInMillis)
+        updateTotalSessionDuration()
+        viewModel.setTimeLeftInMillis(totalSessionDurationInMillis)
         createTimer().start()
 
         isTimerInitialized = true
@@ -50,11 +50,17 @@ class Clock(val viewModel: IClockViewModel) {
     }
 
     fun skipToNextSession() {
-        countDownTimer.cancel()
+        try {
+            countDownTimer.cancel()
+        }
+        catch (e: UninitializedPropertyAccessException) {
+            startTimer()
+            countDownTimer.cancel()
+        }
         cycleHandler.switchToNextSession()
         timerRunning = false
         isTimerInitialized = false
-        updateSessionDuration()
+        updateTotalSessionDuration()
     }
 
     fun stopTimer() {
@@ -69,8 +75,8 @@ class Clock(val viewModel: IClockViewModel) {
         return this::countDownTimer.isInitialized
     }
 
-    private fun updateSessionDuration() {
-        sessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
+    fun updateTotalSessionDuration() {
+        totalSessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
     }
 
     companion object {

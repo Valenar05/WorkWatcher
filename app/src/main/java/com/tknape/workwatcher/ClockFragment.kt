@@ -33,6 +33,18 @@ class ClockFragment : Fragment() {
 
         viewModel.timerProgressInPercents.observe(this, progressObserver)
 
+        val sessionTypeObserver = Observer<String> { currrentSessionType ->
+            sessionName.text = currrentSessionType
+        }
+
+        viewModel.currentSessionType.observe(this, sessionTypeObserver)
+
+        val infoToNextBigBreakObserver = Observer<String> { nextBigBreak ->
+            workSessionsLeftToBigBreakInfo.text = nextBigBreak
+        }
+
+        viewModel.workSessionsUntilBigBreak.observe(this, infoToNextBigBreakObserver)
+
         return inflater.inflate(R.layout.content_main, container, false)
     }
 
@@ -58,6 +70,7 @@ class ClockFragment : Fragment() {
 
         skip_to_next_button.setOnClickListener {
             viewModel.skipToNextSession()
+            start_button.setImageResource(R.drawable.ic_play)
         }
     }
 }
