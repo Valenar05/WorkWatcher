@@ -15,10 +15,7 @@ class ClockUnitTest {
     @Test
     fun shouldStartCountDownTimer() {
         val clock = Clock(MockClockViewModel())
-        Assert.assertFalse(clock.isCountDownTimerInitialized())
         clock.startTimer()
         Assert.assertNotNull(clock.countDownTimer)
-
-
     }
 }

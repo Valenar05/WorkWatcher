@@ -3,50 +3,42 @@ package com.tknape.workwatcher.Clock
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.tknape.workwatcher.IClockViewModel
 
-class Clock(val viewModel: IClockViewModel) {
+class Clock {
 
+    lateinit var countDownTimer: CountDownTimer
+    val cycleHandler = CycleHandler()
+    var hasTimerBeenStarted = false
+
+    private val mutableTimeLeftInMillis: MutableLiveData<Long> by lazy {
+        MutableLiveData<Long>()
+    }
     private val mutableIsTimerRunning: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
-
+    val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
     val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning
+    var initialSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
 
-    val cycleHandler = CycleHandler()
-    var totalSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
+    init {
+        createTimer()
+    }
 
-    lateinit var countDownTimer: CountDownTimer
-
-    private fun createTimer(): CountDownTimer {
-        countDownTimer = object : CountDownTimer(viewModel.timeLeftInMillis.value!!, 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
-                viewModel.setTimeLeftInMillis(millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                cycleHandler.switchToNextSession()
-                switchTimerRunning(false)
-                isTimerInitialized = false
-                updateTotalSessionDuration()
-                viewModel.setTimeLeftInMillis(totalSessionDurationInMillis)
-            }
-        }
-        return countDownTimer
+    fun setTimeLeftInMillis(time: Long) {
+        mutableTimeLeftInMillis.value = time
     }
 
     fun startTimer() {
-        updateTotalSessionDuration()
-        viewModel.setTimeLeftInMillis(totalSessionDurationInMillis)
+        updateInitialSessionDuration()
+        setTimeLeftInMillis(initialSessionDurationInMillis)
         createTimer().start()
 
-        isTimerInitialized = true
+        hasTimerBeenStarted = true
         switchTimerRunning(true)
     }
 
     fun resumeTimer() {
-        createTimer().start()
+        countDownTimer.start()
 
         switchTimerRunning(true)
     }
@@ -58,33 +50,23 @@ class Clock(val viewModel: IClockViewModel) {
     }
 
     fun skipToNextSession() {
-        try {
-            countDownTimer.cancel()
-        }
-        catch (e: UninitializedPropertyAccessException) {
-            startTimer()
-            countDownTimer.cancel()
-        }
+        countDownTimer.cancel()
         cycleHandler.switchToNextSession()
         switchTimerRunning(false)
-        isTimerInitialized = false
-        updateTotalSessionDuration()
+        hasTimerBeenStarted = false
+        updateInitialSessionDuration()
     }
 
     fun stopTimer() {
         countDownTimer.cancel()
         cycleHandler.resetSessionNumber()
 
-        isTimerInitialized = false
+        hasTimerBeenStarted = false
         switchTimerRunning(false)
     }
 
-    fun isCountDownTimerInitialized(): Boolean {
-        return this::countDownTimer.isInitialized
-    }
-
-    fun updateTotalSessionDuration() {
-        totalSessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
+    fun updateInitialSessionDuration() {
+        initialSessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
     }
 
     fun isTimerRunning(): Boolean {
@@ -95,8 +77,21 @@ class Clock(val viewModel: IClockViewModel) {
         mutableIsTimerRunning.value = boolean
     }
 
-    companion object {
-        var isTimerInitialized = false
+    private fun createTimer(): CountDownTimer {
+        countDownTimer = object : CountDownTimer(timeLeftInMillis.value ?:cycleHandler.getCycleLengthInMillis(), 1000) {
 
+            override fun onTick(millisUntilFinished: Long) {
+                setTimeLeftInMillis(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                cycleHandler.switchToNextSession()
+                switchTimerRunning(false)
+                hasTimerBeenStarted = false
+                updateInitialSessionDuration()
+                setTimeLeftInMillis(initialSessionDurationInMillis)
+            }
+        }
+        return countDownTimer
     }
 }
