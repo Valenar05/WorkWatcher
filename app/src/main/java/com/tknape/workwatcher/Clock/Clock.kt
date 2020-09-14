@@ -1,10 +1,17 @@
 package com.tknape.workwatcher.Clock
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.tknape.workwatcher.IClockViewModel
 
 class Clock(val viewModel: IClockViewModel) {
 
+    private val mutableIsTimerRunning: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning
 
     val cycleHandler = CycleHandler()
     var totalSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
@@ -20,9 +27,10 @@ class Clock(val viewModel: IClockViewModel) {
 
             override fun onFinish() {
                 cycleHandler.switchToNextSession()
-                timerRunning = false
+                switchTimerRunning(false)
                 isTimerInitialized = false
                 updateTotalSessionDuration()
+                viewModel.setTimeLeftInMillis(totalSessionDurationInMillis)
             }
         }
         return countDownTimer
@@ -34,19 +42,19 @@ class Clock(val viewModel: IClockViewModel) {
         createTimer().start()
 
         isTimerInitialized = true
-        timerRunning = true
+        switchTimerRunning(true)
     }
 
     fun resumeTimer() {
         createTimer().start()
 
-        timerRunning = true
+        switchTimerRunning(true)
     }
 
     fun pauseTimer() {
         countDownTimer.cancel()
 
-        timerRunning = false
+        switchTimerRunning(false)
     }
 
     fun skipToNextSession() {
@@ -58,7 +66,7 @@ class Clock(val viewModel: IClockViewModel) {
             countDownTimer.cancel()
         }
         cycleHandler.switchToNextSession()
-        timerRunning = false
+        switchTimerRunning(false)
         isTimerInitialized = false
         updateTotalSessionDuration()
     }
@@ -68,7 +76,7 @@ class Clock(val viewModel: IClockViewModel) {
         cycleHandler.resetSessionNumber()
 
         isTimerInitialized = false
-        timerRunning = false
+        switchTimerRunning(false)
     }
 
     fun isCountDownTimerInitialized(): Boolean {
@@ -79,8 +87,15 @@ class Clock(val viewModel: IClockViewModel) {
         totalSessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
     }
 
+    fun isTimerRunning(): Boolean {
+        return isTimerRunning.value ?: false
+    }
+
+    fun switchTimerRunning(boolean: Boolean) {
+        mutableIsTimerRunning.value = boolean
+    }
+
     companion object {
-        var timerRunning = false
         var isTimerInitialized = false
 
     }

@@ -14,13 +14,14 @@ class ClockViewModel : ViewModel(), IClockViewModel {
         MutableLiveData<Long>()
     }
 
-
     override val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
 
     init {
         clock = Clock(this)
         setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
+
+    val isTimerRunning: LiveData<Boolean> = clock.isTimerRunning
 
     val timerProgressInPercents: LiveData<Float> =
         Transformations.map(mutableTimeLeftInMillis) { timeLeft ->
@@ -44,11 +45,11 @@ class ClockViewModel : ViewModel(), IClockViewModel {
 
     override fun startPauseClock() {
 
-        if (!Clock.timerRunning && Clock.isTimerInitialized) {
+        if (!clock.isTimerRunning() && Clock.isTimerInitialized) {
             clock.resumeTimer()
             Log.d("Timer", "Resuming timer")
         }
-        else if (Clock.timerRunning && Clock.isTimerInitialized) {
+        else if (clock.isTimerRunning() && Clock.isTimerInitialized) {
             clock.pauseTimer()
             Log.d("Timer", "Stopping timer")
             Log.d("Timer", mutableTimeLeftInMillis.value.toString())
@@ -78,7 +79,7 @@ class ClockViewModel : ViewModel(), IClockViewModel {
     }
 
     override fun isTimerRunning(): Boolean {
-        return Clock.timerRunning
+        return clock.isTimerRunning()
     }
 
     private fun getSessionType(sessionCycle: Int): String {

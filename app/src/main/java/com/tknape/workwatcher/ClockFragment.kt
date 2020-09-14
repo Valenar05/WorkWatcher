@@ -43,6 +43,17 @@ class ClockFragment : Fragment() {
             workSessionsLeftToBigBreakInfo.text = nextBigBreak
         }
 
+        val isTimerRunningObserver = Observer<Boolean> { isTimerRunning ->
+            if (isTimerRunning) {
+                start_button.setImageResource(R.drawable.ic_pause)
+            }
+            else {
+                start_button.setImageResource(R.drawable.ic_play)
+            }
+        }
+
+        viewModel.isTimerRunning.observe(this, isTimerRunningObserver)
+
         viewModel.workSessionsUntilBigBreak.observe(this, infoToNextBigBreakObserver)
 
         return inflater.inflate(R.layout.content_main, container, false)
@@ -52,25 +63,16 @@ class ClockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         start_button.setOnClickListener {
-
-            if (viewModel.isTimerRunning()) {
-                start_button.setImageResource(R.drawable.ic_play)
-            }
-            else if (!viewModel.isTimerRunning()) {
-                start_button.setImageResource(R.drawable.ic_pause)
-            }
-
             viewModel.startPauseClock()
         }
 
         stop_button.setOnClickListener {
             viewModel.stopClock()
-            start_button.setImageResource(R.drawable.ic_play)
         }
 
         skip_to_next_button.setOnClickListener {
             viewModel.skipToNextSession()
-            start_button.setImageResource(R.drawable.ic_play)
+
         }
     }
 }
