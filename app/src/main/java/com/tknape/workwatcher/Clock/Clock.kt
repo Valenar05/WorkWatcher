@@ -17,7 +17,7 @@ class Clock {
         MutableLiveData<Boolean>()
     }
     val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
-    val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning
+    val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning // TODO merge into one display state liveData
     var initialSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
 
     init {
@@ -38,7 +38,7 @@ class Clock {
     }
 
     fun resumeTimer() {
-        countDownTimer.start()
+        createTimer().start()
 
         switchTimerRunning(true)
     }
@@ -77,7 +77,7 @@ class Clock {
         mutableIsTimerRunning.value = boolean
     }
 
-    private fun createTimer(): CountDownTimer {
+    fun createTimer(): CountDownTimer {
         countDownTimer = object : CountDownTimer(timeLeftInMillis.value ?:cycleHandler.getCycleLengthInMillis(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {

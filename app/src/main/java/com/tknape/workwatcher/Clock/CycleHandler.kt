@@ -3,7 +3,7 @@ package com.tknape.workwatcher.Clock
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.Transformations.map
 
 class CycleHandler {
 
@@ -12,7 +12,7 @@ class CycleHandler {
     }
 
     val currentSessionCycle: LiveData<Int> =
-        Transformations.map(mutableCurrentSessionNumber) { sessionNumber ->
+        map(mutableCurrentSessionNumber) { sessionNumber ->
             sessionNumber % 8
         }
 
@@ -23,8 +23,8 @@ class CycleHandler {
     }
 
     fun getSessionCycle(): Int {
-        val x = currentSessionNumber.value
-        val currentSessionCycle = x!! % 8
+        val x = currentSessionNumber.value!!
+        val currentSessionCycle = x % 8
         return currentSessionCycle
     }
 

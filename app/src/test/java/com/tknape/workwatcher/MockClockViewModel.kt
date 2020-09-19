@@ -1,6 +1,5 @@
 package com.tknape.workwatcher
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class MockClockViewModel: IClockViewModel {
@@ -11,19 +10,12 @@ class MockClockViewModel: IClockViewModel {
         mutableTimeLeftInMillis.value = 50000L
     }
 
-    override val timeLeftInMillis: LiveData<Long>
-        get() = mutableTimeLeftInMillis
-
     override fun startPauseClock() {
         TODO("Not yet implemented")
     }
 
     override fun stopClock() {
         TODO("Not yet implemented")
-    }
-
-    override fun setTimeLeftInMillis(time: Long) {
-
     }
 
     override fun skipToNextSession() {

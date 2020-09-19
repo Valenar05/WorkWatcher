@@ -2,7 +2,7 @@ package com.tknape.workwatcher
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.ViewModel
 import com.tknape.workwatcher.Clock.Clock
 
@@ -18,22 +18,21 @@ class ClockViewModel : ViewModel(), IClockViewModel {
     val isTimerRunning: LiveData<Boolean> = clock.isTimerRunning
 
     val timerProgressInPercents: LiveData<Float> =
-        Transformations.map(clock.timeLeftInMillis) { timeLeft ->
+        map(clock.timeLeftInMillis) { timeLeft ->
             (100 - (timeLeft.toFloat() / clock.initialSessionDurationInMillis.toFloat() * 100))
         }
 
     val currentSessionType: LiveData<String> =
-        Transformations.map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
+        map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
             getSessionType(currentSessionCycle)
         }
 
     val workSessionsUntilBigBreak: LiveData<String> =
-        Transformations.map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
+        map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
             getSessionToBigBreakString(currentSessionCycle)
         }
 
-
-    val formattedTimeLeftInMillis : LiveData<String> = Transformations.map(clock.timeLeftInMillis) { time ->
+    val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
         "${if (time / 60000 < 10) {"0"} else {""}}${time / 60000}:${if((time % 60000) / 1000 < 10) {"0"} else {""}}${(time % 60000) / 1000}" //TODO make string formatting more readable
     }
 
@@ -67,8 +66,6 @@ class ClockViewModel : ViewModel(), IClockViewModel {
         val nextSessionDuration = clock.cycleHandler.getCycleLengthInMillis()
         clock.setTimeLeftInMillis(nextSessionDuration)
     }
-
-
 
     override fun isTimerRunning(): Boolean {
         return clock.isTimerRunning()
