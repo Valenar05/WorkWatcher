@@ -25,19 +25,19 @@ class ClockFragment : Fragment() {
             clock.text = timer
         }
 
-        viewModel.formattedTimeLeftInMillis.observe(this, clockObserver)
+        viewModel.formattedTimeLeftInMillis.observe(viewLifecycleOwner, clockObserver)
 
         val progressObserver = Observer<Float> { progressPercentage ->
             circularProgressBar.progress = progressPercentage
         }
 
-        viewModel.timerProgressInPercents.observe(this, progressObserver)
+        viewModel.timerProgressInPercents.observe(viewLifecycleOwner, progressObserver)
 
         val sessionTypeObserver = Observer<String> { currrentSessionType ->
             sessionName.text = currrentSessionType
         }
 
-        viewModel.currentSessionType.observe(this, sessionTypeObserver)
+        viewModel.currentSessionType.observe(viewLifecycleOwner, sessionTypeObserver)
 
         val infoToNextBigBreakObserver = Observer<String> { nextBigBreak ->
             workSessionsLeftToBigBreakInfo.text = nextBigBreak
@@ -45,16 +45,18 @@ class ClockFragment : Fragment() {
 
         val isTimerRunningObserver = Observer<Boolean> { isTimerRunning ->
             if (isTimerRunning) {
-                start_button.setImageResource(R.drawable.ic_pause)
+                setPauseIcon()
+                keepScreenOn(true)
             }
             else {
-                start_button.setImageResource(R.drawable.ic_play)
+                setStartIcon()
+                keepScreenOn(false)
             }
         }
 
-        viewModel.isTimerRunning.observe(this, isTimerRunningObserver)
+        viewModel.isTimerRunning.observe(viewLifecycleOwner, isTimerRunningObserver)
 
-        viewModel.workSessionsUntilBigBreak.observe(this, infoToNextBigBreakObserver)
+        viewModel.workSessionsUntilBigBreak.observe(viewLifecycleOwner, infoToNextBigBreakObserver)
 
         return inflater.inflate(R.layout.content_main, container, false)
     }
@@ -74,5 +76,17 @@ class ClockFragment : Fragment() {
             viewModel.skipToNextSession()
 
         }
+    }
+
+    private fun setStartIcon() {
+        start_button.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun setPauseIcon() {
+        start_button.setImageResource(R.drawable.ic_pause)
+    }
+
+    private fun keepScreenOn(boolean: Boolean) {
+        requireView().keepScreenOn = boolean
     }
 }

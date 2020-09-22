@@ -7,7 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-class ClockUnitTest {
+class ClockViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
