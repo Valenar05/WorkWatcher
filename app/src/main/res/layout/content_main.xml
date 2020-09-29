@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/clock"
+        android:id="@+id/clockDisplay"
         style="@style/clockStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +85,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/start_button"
         app:srcCompat="@drawable/ic_skip_to_next" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

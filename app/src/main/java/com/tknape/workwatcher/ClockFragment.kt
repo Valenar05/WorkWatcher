@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.tknape.workwatcher.Clock.Clock
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
@@ -13,7 +14,9 @@ import kotlinx.android.synthetic.main.content_main.*
  */
 class ClockFragment : Fragment() {
 
+    lateinit var notification: TimerNotification
     private lateinit var viewModel: ClockViewModel
+    val clock = Clock
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,14 +25,19 @@ class ClockFragment : Fragment() {
         viewModel = ClockViewModel()
 
         val clockObserver = Observer<String> { timer ->
-            clock.text = timer
+            clockDisplay.text = timer
         }
 
         viewModel.formattedTimeLeftInMillis.observe(viewLifecycleOwner, clockObserver)
 
         val progressObserver = Observer<Float> { progressPercentage ->
             circularProgressBar.progress = progressPercentage
+            if (clock.hasTimerBeenStarted) {
+                sendNotification()
+            }
         }
+
+        notification = TimerNotification(requireContext())
 
         viewModel.timerProgressInPercents.observe(viewLifecycleOwner, progressObserver)
 
@@ -74,8 +82,13 @@ class ClockFragment : Fragment() {
 
         skip_to_next_button.setOnClickListener {
             viewModel.skipToNextSession()
-
         }
+    }
+
+    fun sendNotification() {
+        val timeLeftInSession = viewModel.formattedTimeLeftInMillis.value!!
+        val sessionType = viewModel.currentSessionType.value!!
+        notification.sendNotification(timeLeftInSession, sessionType)
     }
 
     private fun setStartIcon() {

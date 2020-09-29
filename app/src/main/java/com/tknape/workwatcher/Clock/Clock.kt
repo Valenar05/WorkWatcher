@@ -1,10 +1,12 @@
 package com.tknape.workwatcher.Clock
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class Clock {
+
+object Clock {
 
     lateinit var countDownTimer: CountDownTimer
     val cycleHandler = CycleHandler()
@@ -37,6 +39,38 @@ class Clock {
         switchTimerRunning(true)
     }
 
+    fun startPauseClock() {
+
+        if (!isTimerRunning() && hasTimerBeenStarted) {
+            resumeTimer()
+            Log.d("Timer", "Resuming timer")
+        }
+        else if (isTimerRunning() && hasTimerBeenStarted) {
+            pauseTimer()
+            Log.d("Timer", "Stopping timer")
+            Log.d("Timer", timeLeftInMillis.value.toString())
+        }
+        else {
+            startTimer()
+            Log.d("Timer", "Starting timer")
+            Log.d("Timer", timeLeftInMillis.value.toString())
+        }
+    }
+
+    fun stopClock() {
+        stopTimer()
+        updateInitialSessionDuration()
+        val nextSessionDuration = cycleHandler.getCycleLengthInMillis()
+        setTimeLeftInMillis(nextSessionDuration)
+    }
+
+    fun skipToNextSession() {
+        setTimerToNextSession()
+        val nextSessionDuration = cycleHandler.getCycleLengthInMillis()
+        setTimeLeftInMillis(nextSessionDuration)
+    }
+
+
     fun resumeTimer() {
         createTimer().start()
 
@@ -49,7 +83,7 @@ class Clock {
         switchTimerRunning(false)
     }
 
-    fun skipToNextSession() {
+    fun setTimerToNextSession() {
         countDownTimer.cancel()
         cycleHandler.switchToNextSession()
         switchTimerRunning(false)

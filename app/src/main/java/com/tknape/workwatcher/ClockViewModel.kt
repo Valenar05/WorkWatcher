@@ -8,10 +8,9 @@ import com.tknape.workwatcher.Clock.Clock
 
 class ClockViewModel : ViewModel(), IClockViewModel {
 
-    private val clock: Clock
+    private val clock = Clock
 
     init {
-        clock = Clock()
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
 
@@ -29,7 +28,7 @@ class ClockViewModel : ViewModel(), IClockViewModel {
 
     val workSessionsUntilBigBreak: LiveData<String> =
         map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
-            getSessionToBigBreakString(currentSessionCycle)
+            getSessionsLeftToBigBreakString(currentSessionCycle)
         }
 
     val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
@@ -37,38 +36,20 @@ class ClockViewModel : ViewModel(), IClockViewModel {
     }
 
     override fun startPauseClock() {
-
-        if (!clock.isTimerRunning() && clock.hasTimerBeenStarted) {
-            clock.resumeTimer()
-            Log.d("Timer", "Resuming timer")
-        }
-        else if (clock.isTimerRunning() && clock.hasTimerBeenStarted) {
-            clock.pauseTimer()
-            Log.d("Timer", "Stopping timer")
-            Log.d("Timer", clock.timeLeftInMillis.value.toString())
-        }
-        else {
-            clock.startTimer()
-            Log.d("Timer", "Starting timer")
-            Log.d("Timer", clock.timeLeftInMillis.value.toString())
-        }
+        clock.startPauseClock()
     }
 
     override fun stopClock() {
-        clock.stopTimer()
-        clock.updateInitialSessionDuration()
-        val nextSessionDuration = clock.cycleHandler.getCycleLengthInMillis()
-        clock.setTimeLeftInMillis(nextSessionDuration)
+        clock.stopClock()
+    }
+
+
+    override fun isTimerRunning(): Boolean {
+        return clock.isTimerRunning()
     }
 
     override fun skipToNextSession() {
         clock.skipToNextSession()
-        val nextSessionDuration = clock.cycleHandler.getCycleLengthInMillis()
-        clock.setTimeLeftInMillis(nextSessionDuration)
-    }
-
-    override fun isTimerRunning(): Boolean {
-        return clock.isTimerRunning()
     }
 
     private fun getSessionType(sessionCycle: Int): String {
@@ -80,7 +61,7 @@ class ClockViewModel : ViewModel(), IClockViewModel {
         }
     }
 
-    private fun getSessionToBigBreakString(sessionCycle: Int): String {
+    private fun getSessionsLeftToBigBreakString(sessionCycle: Int): String {
         when(sessionCycle) {
             0, 1 -> return "4 Work sessions until big break"
             2, 3 -> return "3 Work sessions until big break"
@@ -89,5 +70,4 @@ class ClockViewModel : ViewModel(), IClockViewModel {
             else -> return "##Error"
         }
     }
-
 }
