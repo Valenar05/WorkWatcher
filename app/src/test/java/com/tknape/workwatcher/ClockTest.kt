@@ -20,7 +20,7 @@ class ClockTest {
 
     @Test
     fun `Timer is created upon instance initialization`() {
-        val clock = Clock
+        val clock = Clock()
 
         assertNotNull(clock.countDownTimer)
     }
@@ -30,7 +30,7 @@ class ClockTest {
     fun `setTimeLeftInMillis changes LiveData correctly`(
         timeLeft: Long
     ) {
-        val clock = Clock
+        val clock = Clock()
 
         clock.setTimeLeftInMillis(timeLeft)
 

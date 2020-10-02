@@ -1,12 +1,22 @@
 package com.tknape.workwatcher.Clock
 
+import android.app.Activity
+import android.content.Context
+import android.os.Build
 import android.os.CountDownTimer
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.tknape.workwatcher.MainActivity
+import com.tknape.workwatcher.di.ActivityBuildersModule
+import dagger.Component
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-object Clock {
+class Clock @Inject constructor() {
 
     lateinit var countDownTimer: CountDownTimer
     val cycleHandler = CycleHandler()
@@ -124,6 +134,21 @@ object Clock {
                 hasTimerBeenStarted = false
                 updateInitialSessionDuration()
                 setTimeLeftInMillis(initialSessionDurationInMillis)
+//
+//                val v =
+//                   activity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    v!!.vibrate(
+//                        VibrationEffect.createOneShot(
+//                            500,
+//                            VibrationEffect.DEFAULT_AMPLITUDE
+//                        )
+//                    )
+//                } else {
+//                    //deprecated in API 26
+//                    v!!.vibrate(500)
+//                }
+
             }
         }
         return countDownTimer

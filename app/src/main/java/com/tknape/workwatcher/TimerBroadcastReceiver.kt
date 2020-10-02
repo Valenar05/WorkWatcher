@@ -7,7 +7,7 @@ import com.tknape.workwatcher.Clock.Clock
 
 class TimerBroadcastReceiver() : BroadcastReceiver() {
 
-    val clock = Clock
+    val clock = Clock()
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null && intent.action != null) {

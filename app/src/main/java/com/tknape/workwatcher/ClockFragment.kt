@@ -7,22 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.Clock.Clock_Factory.create
+import com.tknape.workwatcher.di.DaggerAppComponent
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+
+
 class ClockFragment : Fragment() {
+
+    @Inject
+    lateinit var clock: Clock
 
     lateinit var notification: TimerNotification
     private lateinit var viewModel: ClockViewModel
-    val clock = Clock
+//    val clock = Clock()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ClockViewModel()
+
+        DaggerAppComponent.builder().build().inject(this)
 
         val clockObserver = Observer<String> { timer ->
             clockDisplay.text = timer

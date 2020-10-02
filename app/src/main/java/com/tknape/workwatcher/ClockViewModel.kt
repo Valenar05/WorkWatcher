@@ -5,12 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.ViewModel
 import com.tknape.workwatcher.Clock.Clock
+import javax.inject.Inject
 
 class ClockViewModel : ViewModel(), IClockViewModel {
 
-    private val clock = Clock
+    val clock = Clock()
+//
+//    @Inject
+//    lateinit var clock : Clock
 
     init {
+
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
 
