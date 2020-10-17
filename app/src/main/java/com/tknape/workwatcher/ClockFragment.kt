@@ -6,30 +6,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.di.ClockComponent
+import com.tknape.workwatcher.di.DaggerClockComponent
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class ClockFragment : Fragment() {
 
+    @Inject
+    lateinit var clock: Clock
+
+
+    lateinit var notification: TimerNotification
     private lateinit var viewModel: ClockViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ClockViewModel()
+
+        val application = requireActivity().application as WorkWatcherApp
+
+        viewModel = ClockViewModel(application)
+
+        val appComponent = application.appComponent
+
+        DaggerClockComponent.builder()
+            .appComponent(appComponent)
+            .build()
+            .inject(this)
 
         val clockObserver = Observer<String> { timer ->
-            clock.text = timer
+            clockDisplay.text = timer
         }
 
         viewModel.formattedTimeLeftInMillis.observe(viewLifecycleOwner, clockObserver)
 
         val progressObserver = Observer<Float> { progressPercentage ->
             circularProgressBar.progress = progressPercentage
+            if (clock.hasTimerBeenStarted) {
+                sendNotification()
+            }
         }
+
+        notification = TimerNotification(requireContext())
 
         viewModel.timerProgressInPercents.observe(viewLifecycleOwner, progressObserver)
 
@@ -47,8 +68,7 @@ class ClockFragment : Fragment() {
             if (isTimerRunning) {
                 setPauseIcon()
                 keepScreenOn(true)
-            }
-            else {
+            } else {
                 setStartIcon()
                 keepScreenOn(false)
             }
@@ -74,8 +94,13 @@ class ClockFragment : Fragment() {
 
         skip_to_next_button.setOnClickListener {
             viewModel.skipToNextSession()
-
         }
+    }
+
+    fun sendNotification() {
+        val timeLeftInSession = viewModel.formattedTimeLeftInMillis.value!!
+        val sessionType = viewModel.currentSessionType.value!!
+        notification.sendNotification(timeLeftInSession, sessionType)
     }
 
     private fun setStartIcon() {

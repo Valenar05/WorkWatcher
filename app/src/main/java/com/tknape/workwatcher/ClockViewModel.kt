@@ -1,17 +1,30 @@
 package com.tknape.workwatcher
 
-import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
-import androidx.lifecycle.ViewModel
 import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.di.AppComponent
+import com.tknape.workwatcher.di.DaggerClockComponent
+import javax.inject.Inject
 
-class ClockViewModel : ViewModel(), IClockViewModel {
+class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application), IClockViewModel {
 
-    private val clock: Clock
+    @Inject
+    lateinit var clock : Clock
+
+    @Inject
+    lateinit var application: WorkWatcherApp
+
+    private val appComponent: AppComponent = application.appComponent
 
     init {
-        clock = Clock()
+
+        DaggerClockComponent.builder()
+            .appComponent(appComponent)
+            .build()
+            .inject(this)
+
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
 
@@ -29,7 +42,7 @@ class ClockViewModel : ViewModel(), IClockViewModel {
 
     val workSessionsUntilBigBreak: LiveData<String> =
         map(clock.cycleHandler.currentSessionCycle) { currentSessionCycle ->
-            getSessionToBigBreakString(currentSessionCycle)
+            getSessionsLeftToBigBreakString(currentSessionCycle)
         }
 
     val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
@@ -37,38 +50,20 @@ class ClockViewModel : ViewModel(), IClockViewModel {
     }
 
     override fun startPauseClock() {
-
-        if (!clock.isTimerRunning() && clock.hasTimerBeenStarted) {
-            clock.resumeTimer()
-            Log.d("Timer", "Resuming timer")
-        }
-        else if (clock.isTimerRunning() && clock.hasTimerBeenStarted) {
-            clock.pauseTimer()
-            Log.d("Timer", "Stopping timer")
-            Log.d("Timer", clock.timeLeftInMillis.value.toString())
-        }
-        else {
-            clock.startTimer()
-            Log.d("Timer", "Starting timer")
-            Log.d("Timer", clock.timeLeftInMillis.value.toString())
-        }
+        clock.startPauseClock()
     }
 
     override fun stopClock() {
-        clock.stopTimer()
-        clock.updateInitialSessionDuration()
-        val nextSessionDuration = clock.cycleHandler.getCycleLengthInMillis()
-        clock.setTimeLeftInMillis(nextSessionDuration)
+        clock.stopClock()
+    }
+
+
+    override fun isTimerRunning(): Boolean {
+        return clock.isTimerRunning()
     }
 
     override fun skipToNextSession() {
         clock.skipToNextSession()
-        val nextSessionDuration = clock.cycleHandler.getCycleLengthInMillis()
-        clock.setTimeLeftInMillis(nextSessionDuration)
-    }
-
-    override fun isTimerRunning(): Boolean {
-        return clock.isTimerRunning()
     }
 
     private fun getSessionType(sessionCycle: Int): String {
@@ -80,7 +75,7 @@ class ClockViewModel : ViewModel(), IClockViewModel {
         }
     }
 
-    private fun getSessionToBigBreakString(sessionCycle: Int): String {
+    private fun getSessionsLeftToBigBreakString(sessionCycle: Int): String {
         when(sessionCycle) {
             0, 1 -> return "4 Work sessions until big break"
             2, 3 -> return "3 Work sessions until big break"
@@ -89,5 +84,4 @@ class ClockViewModel : ViewModel(), IClockViewModel {
             else -> return "##Error"
         }
     }
-
 }

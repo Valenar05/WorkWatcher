@@ -41,14 +41,14 @@ class CycleHandler {
     fun getCycleLengthInMillis(): Long {
         val currentCycle = getSessionCycle()
         when (currentCycle) {
-            1 -> return 1500000L // 15000L
-            2 -> return 300000L // 5000L
-            3 -> return 1500000L // 15000L
-            4 -> return 300000L // 5000L
-            5 -> return 1500000L // 15000L
-            6 -> return 300000L // 5000L
-            7 -> return 1500000L // 15000L
-            0 -> return 900000L // 10000L
+            1 -> return 15000L // 1500000L
+            2 -> return 5000L // 300000L
+            3 -> return 15000L // 1500000L
+            4 -> return 5000L // 300000L
+            5 -> return 15000L // 1500000L
+            6 -> return 5000L // 300000L
+            7 -> return 15000L // 1500000L
+            0 -> return 10000L // 900000L
             else -> {
                 Log.d("CycleHandler", "Invalid cycle number. Resetting cycles")
                 resetSessionNumber()
