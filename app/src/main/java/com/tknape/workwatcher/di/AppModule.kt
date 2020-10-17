@@ -1,21 +1,19 @@
 package com.tknape.workwatcher.di
 
+import android.app.Application
 import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.WorkWatcherApp
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class AppModule {
 
-//    @Provides
-//    fun giveString() : String {
-//        return "meh"
-//    }
-
-    @Singleton
     @Provides
-    fun provideClock(): Clock {
-        return Clock()
-    }
+    @ApplicationScope
+    fun provideClock() = Clock()
+
+    @Provides
+    @ApplicationScope
+    fun provideApplication() = WorkWatcherApp()
 }

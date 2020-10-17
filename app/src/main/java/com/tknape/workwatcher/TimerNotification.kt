@@ -9,29 +9,29 @@ import androidx.core.app.NotificationManagerCompat
 class TimerNotification(val context: Context) {
 
 
-    val notificationManager = NotificationManagerCompat.from(context)
+    private val notificationManager = NotificationManagerCompat.from(context)
 
-    val intent = Intent(context, MainActivity::class.java)
+    private val intent = Intent(context, MainActivity::class.java)
 
-    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+    private val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-    val stopIntent =
+    private val stopIntent =
         Intent(context, TimerBroadcastReceiver::class.java).setAction(Commons.STOP_TIMER_ACTION)
 
-    val stopPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, stopIntent, 0)
+    private val stopPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, stopIntent, 0)
 
-    val startPauseIntent = Intent(
+    private val startPauseIntent = Intent(
         context,
         TimerBroadcastReceiver::class.java
     ).setAction(Commons.START_PAUSE_TIMER_ACTION)
 
-    val startPausePendingIntent: PendingIntent =
+    private val startPausePendingIntent: PendingIntent =
         PendingIntent.getBroadcast(context, 0, startPauseIntent, 0)
 
-    val skipIntent =
+    private val skipIntent =
         Intent(context, TimerBroadcastReceiver::class.java).setAction(Commons.SKIP_TIMER_ACTION)
 
-    val skipPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, skipIntent, 0)
+    private val skipPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, skipIntent, 0)
 
 
     fun sendNotification(timeLeftInSession: String, sessionType: String) {

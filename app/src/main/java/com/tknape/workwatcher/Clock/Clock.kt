@@ -1,22 +1,15 @@
 package com.tknape.workwatcher.Clock
 
-import android.app.Activity
-import android.content.Context
-import android.os.Build
 import android.os.CountDownTimer
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.tknape.workwatcher.MainActivity
-import com.tknape.workwatcher.di.ActivityBuildersModule
-import dagger.Component
+import com.tknape.workwatcher.di.ClockScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class Clock @Inject constructor() {
+@ClockScope
+class Clock {
 
     lateinit var countDownTimer: CountDownTimer
     val cycleHandler = CycleHandler()

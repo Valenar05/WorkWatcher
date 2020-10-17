@@ -1,20 +1,29 @@
 package com.tknape.workwatcher
 
-import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
-import androidx.lifecycle.ViewModel
 import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.di.AppComponent
+import com.tknape.workwatcher.di.DaggerClockComponent
 import javax.inject.Inject
 
-class ClockViewModel : ViewModel(), IClockViewModel {
+class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application), IClockViewModel {
 
-    val clock = Clock()
-//
-//    @Inject
-//    lateinit var clock : Clock
+    @Inject
+    lateinit var clock : Clock
+
+    @Inject
+    lateinit var application: WorkWatcherApp
+
+    private val appComponent: AppComponent = application.appComponent
 
     init {
+
+        DaggerClockComponent.builder()
+            .appComponent(appComponent)
+            .build()
+            .inject(this)
 
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
