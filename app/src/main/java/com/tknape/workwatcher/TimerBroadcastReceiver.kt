@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.tknape.workwatcher.Clock.Clock
-import com.tknape.workwatcher.di.DaggerClockComponent
+import com.tknape.workwatcher.di.DaggerAppComponent
 import javax.inject.Inject
 
 class TimerBroadcastReceiver : BroadcastReceiver() {
@@ -14,12 +14,8 @@ class TimerBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val application = context!!.applicationContext as WorkWatcherApp
+        DaggerAppComponent.builder()
 
-        val appComponent = application.appComponent
-
-        DaggerClockComponent.builder()
-            .appComponent(appComponent)
             .build()
             .inject(this)
 

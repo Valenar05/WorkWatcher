@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
-class TimerNotification(val context: Context) {
+class TimerNotificationHandler(val context: Context) {
 
 
     private val notificationManager = NotificationManagerCompat.from(context)

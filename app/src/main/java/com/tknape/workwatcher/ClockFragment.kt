@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.tknape.workwatcher.Clock.Clock
-import com.tknape.workwatcher.di.ClockComponent
-import com.tknape.workwatcher.di.DaggerClockComponent
+import com.tknape.workwatcher.di.DaggerAppComponent
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
@@ -18,7 +17,7 @@ class ClockFragment : Fragment() {
     lateinit var clock: Clock
 
 
-    lateinit var notification: TimerNotification
+    lateinit var notificationHandler: TimerNotificationHandler
     private lateinit var viewModel: ClockViewModel
 
     override fun onCreateView(
@@ -30,10 +29,8 @@ class ClockFragment : Fragment() {
 
         viewModel = ClockViewModel(application)
 
-        val appComponent = application.appComponent
 
-        DaggerClockComponent.builder()
-            .appComponent(appComponent)
+        DaggerAppComponent.builder()
             .build()
             .inject(this)
 
@@ -50,7 +47,7 @@ class ClockFragment : Fragment() {
             }
         }
 
-        notification = TimerNotification(requireContext())
+        notificationHandler = TimerNotificationHandler(requireContext())
 
         viewModel.timerProgressInPercents.observe(viewLifecycleOwner, progressObserver)
 
@@ -100,7 +97,7 @@ class ClockFragment : Fragment() {
     fun sendNotification() {
         val timeLeftInSession = viewModel.formattedTimeLeftInMillis.value!!
         val sessionType = viewModel.currentSessionType.value!!
-        notification.sendNotification(timeLeftInSession, sessionType)
+        notificationHandler.sendNotification(timeLeftInSession, sessionType)
     }
 
     private fun setStartIcon() {

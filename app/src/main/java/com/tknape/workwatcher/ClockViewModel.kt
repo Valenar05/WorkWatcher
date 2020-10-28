@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
 import com.tknape.workwatcher.Clock.Clock
 import com.tknape.workwatcher.di.AppComponent
-import com.tknape.workwatcher.di.DaggerClockComponent
+import com.tknape.workwatcher.di.DaggerAppComponent
 import javax.inject.Inject
 
 class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application), IClockViewModel {
@@ -13,17 +13,14 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
     @Inject
     lateinit var clock : Clock
 
-    @Inject
-    lateinit var application: WorkWatcherApp
+//    @Inject
+//    lateinit var application: WorkWatcherApp
 
-    private val appComponent: AppComponent = application.appComponent
 
     init {
 
-        DaggerClockComponent.builder()
-            .appComponent(appComponent)
+        DaggerAppComponent.builder()
             .build()
-            .inject(this)
 
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
     }
