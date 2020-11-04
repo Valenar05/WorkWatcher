@@ -4,11 +4,9 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.tknape.workwatcher.di.ClockScope
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.tknape.workwatcher.di.ApplicationScope
 
-@ClockScope
+@ApplicationScope
 class Clock {
 
     lateinit var countDownTimer: CountDownTimer

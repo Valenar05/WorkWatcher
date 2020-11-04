@@ -1,9 +1,6 @@
 package com.tknape.workwatcher.di
 
-import com.tknape.workwatcher.ClockFragment
-import com.tknape.workwatcher.ClockViewModel
-import com.tknape.workwatcher.TimerBroadcastReceiver
-import com.tknape.workwatcher.WorkWatcherApp
+import com.tknape.workwatcher.*
 import dagger.Component
 
 @ClockScope
@@ -14,5 +11,12 @@ interface ClockComponent {
     fun inject(clockFragment: ClockFragment)
     fun inject(timerBroadcastReceiver: TimerBroadcastReceiver)
     fun inject(clockViewModel: ClockViewModel)
-    fun inject(application: WorkWatcherApp)
+
+    @Component.Builder
+    interface Builder {
+
+        fun appComponent(appComponent: AppComponent): Builder
+
+        fun build(): ClockComponent
+    }
 }
