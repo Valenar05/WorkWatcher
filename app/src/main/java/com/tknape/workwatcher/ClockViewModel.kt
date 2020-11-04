@@ -13,10 +13,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
     @Inject
     lateinit var clock : Clock
 
-    @Inject
-    lateinit var application: WorkWatcherApp
-
     private val appComponent: AppComponent = application.appComponent
+
+    val notification: TimerNotification
 
     init {
 
@@ -26,6 +25,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
             .inject(this)
 
         clock.setTimeLeftInMillis(clock.cycleHandler.getCycleLengthInMillis())
+
+        notification = TimerNotification(application.baseContext)
+
     }
 
     val isTimerRunning: LiveData<Boolean> = clock.isTimerRunning
@@ -49,12 +51,20 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
         "${if (time / 60000 < 10) {"0"} else {""}}${time / 60000}:${if((time % 60000) / 1000 < 10) {"0"} else {""}}${(time % 60000) / 1000}" //TODO make string formatting more readable
     }
 
+    fun sendNotification() {
+        val timeLeftInSession = formattedTimeLeftInMillis.value!!
+        val sessionType = currentSessionType.value!!
+        notification.sendNotification(timeLeftInSession, sessionType)
+    }
+
     override fun startPauseClock() {
         clock.startPauseClock()
+        sendNotification()
     }
 
     override fun stopClock() {
         clock.stopClock()
+        sendNotification()
     }
 
 
@@ -64,6 +74,8 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
     override fun skipToNextSession() {
         clock.skipToNextSession()
+        sendNotification()
+
     }
 
     private fun getSessionType(sessionCycle: Int): String {

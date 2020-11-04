@@ -1,17 +1,32 @@
 package com.tknape.workwatcher.di
 
+import com.tknape.workwatcher.*
 import com.tknape.workwatcher.Clock.Clock
-import com.tknape.workwatcher.TimerBroadcastReceiver
-import com.tknape.workwatcher.WorkWatcherApp
+import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjectionModule
+import dagger.android.AndroidInjector
 
 
 @ApplicationScope
 @Component(
-    modules = [AppModule::class]
+    modules = [
+        ClockModule::class,
+        AndroidInjectionModule::class,
+        ActivityBuildersModule::class]
 )
-interface AppComponent {
+interface AppComponent : AndroidInjector<WorkWatcherApp> {
     fun clock(): Clock
+    fun clockViewModel(): ClockViewModel
     fun application(): WorkWatcherApp
-    fun inject(application: WorkWatcherApp)
+
+    @Component.Builder
+    interface Builder {
+
+        @BindsInstance
+        fun application(application: WorkWatcherApp): Builder
+
+        fun build(): AppComponent
+
+    }
 }
