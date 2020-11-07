@@ -1,6 +1,6 @@
 package com.tknape.workwatcher
 
-import com.tknape.workwatcher.Clock.CycleHandler
+import com.tknape.workwatcher.clock.CycleHandler
 import com.tknape.workwatcher.TestUtilities.InstantExecutorExtension
 import org.junit.*
 import org.junit.jupiter.api.TestInstance
