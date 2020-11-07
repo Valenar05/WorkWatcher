@@ -1,4 +1,4 @@
-package com.tknape.workwatcher.Clock
+package com.tknape.workwatcher.clock
 
 import android.os.CountDownTimer
 import android.util.Log
@@ -10,28 +10,40 @@ import com.tknape.workwatcher.di.ApplicationScope
 class Clock {
 
     lateinit var countDownTimer: CountDownTimer
-    val cycleHandler = CycleHandler()
+    private val cycleHandler = CycleHandler()
     var hasTimerBeenStarted = false
+
 
     private val mutableTimeLeftInMillis: MutableLiveData<Long> by lazy {
         MutableLiveData<Long>()
     }
+    private val mutableHasTimerFinished: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
     private val mutableIsTimerRunning: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+
+    val hasTimerFinished: LiveData<Boolean> = mutableHasTimerFinished
     val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
-    val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning // TODO merge into one display state liveData
+    val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning
     var initialSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
+
+    val currentSessionType: LiveData<String> = cycleHandler.currentSessionType
+
+    val workSessionsUntilBigBreak: LiveData<String> = cycleHandler.workSessionsUntilBigBreak
 
     init {
         createTimer()
     }
 
+
+
     fun setTimeLeftInMillis(time: Long) {
         mutableTimeLeftInMillis.value = time
     }
 
-    fun startTimer() {
+    private fun startTimer() {
         updateInitialSessionDuration()
         setTimeLeftInMillis(initialSessionDurationInMillis)
         createTimer().start()
@@ -72,19 +84,19 @@ class Clock {
     }
 
 
-    fun resumeTimer() {
+    private fun resumeTimer() {
         createTimer().start()
 
         switchTimerRunning(true)
     }
 
-    fun pauseTimer() {
+    private fun pauseTimer() {
         countDownTimer.cancel()
 
         switchTimerRunning(false)
     }
 
-    fun setTimerToNextSession() {
+    private fun setTimerToNextSession() {
         countDownTimer.cancel()
         cycleHandler.switchToNextSession()
         switchTimerRunning(false)
@@ -92,7 +104,7 @@ class Clock {
         updateInitialSessionDuration()
     }
 
-    fun stopTimer() {
+    private fun stopTimer() {
         countDownTimer.cancel()
         cycleHandler.resetSessionNumber()
 
@@ -112,7 +124,11 @@ class Clock {
         mutableIsTimerRunning.value = boolean
     }
 
-    fun createTimer(): CountDownTimer {
+    fun resetHasTimerFinishedFlag() {
+        mutableHasTimerFinished.value = false
+    }
+
+    private fun createTimer(): CountDownTimer {
         countDownTimer = object : CountDownTimer(timeLeftInMillis.value ?:cycleHandler.getCycleLengthInMillis(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -125,6 +141,7 @@ class Clock {
                 hasTimerBeenStarted = false
                 updateInitialSessionDuration()
                 setTimeLeftInMillis(initialSessionDurationInMillis)
+                mutableHasTimerFinished.value = true
 //
 //                val v =
 //                   activity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?

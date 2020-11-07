@@ -1,7 +1,6 @@
 package com.tknape.workwatcher
 
-import android.os.CountDownTimer
-import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.TestUtilities.InstantExecutorExtension
 import org.junit.Assert.*
 import org.junit.jupiter.api.Test
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.mockito.Mockito.*
 import java.util.stream.Stream
 
 

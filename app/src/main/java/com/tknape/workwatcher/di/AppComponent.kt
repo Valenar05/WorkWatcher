@@ -1,7 +1,7 @@
 package com.tknape.workwatcher.di
 
 import com.tknape.workwatcher.*
-import com.tknape.workwatcher.Clock.Clock
+import com.tknape.workwatcher.clock.Clock
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
