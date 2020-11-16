@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="test"
+
+    >
+
+
+    <PreferenceCategory android:title="Cycle Settings">
+
+        <CheckBoxPreference
+            android:key="enabledCustomCycleSettings"
+            android:title="Use custom cycle lengths"
+            />
+
+        <DropDownPreference
+            android:key="big_break_session_length_picker"
+            android:title="Big break length"
+            android:dependency="enabledCustomCycleSettings"
+            android:entries="@array/break_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/break_session_values"
+            />
+
+        <DropDownPreference
+            android:key="small_break_session_length_picker"
+            android:title="Small break length"
+            android:dependency="enabledCustomCycleSettings"
+            android:entries="@array/break_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/break_session_values"
+            />
+
+        <DropDownPreference
+            android:key="work_session_length_picker"
+            android:title="Work session length"
+            android:dependency="enabledCustomCycleSettings"
+            android:entries="@array/work_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/work_session_values"
+            />
+
+    </PreferenceCategory>
+
+
+<!--    <PreferenceCategory android:title="meh">-->
+
+<!--        <Preference-->
+<!--            android:key="stylized"-->
+<!--            android:summary="meh"-->
+<!--            android:title="meh" />-->
+
+<!--        <Preference-->
+<!--            android:icon="@android:drawable/ic_menu_camera"-->
+<!--            android:key="icon"-->
+<!--            android:summary="meh"-->
+<!--            android:title="meh" />-->
+
+<!--        <Preference-->
+<!--            android:key="single_line_title"-->
+<!--            android:summary="meh"-->
+<!--            android:title="meh"-->
+<!--            app:singleLineTitle="true" />-->
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory-->
+<!--        android:title="meh">-->
+
+<!--        <CheckBoxPreference-->
+<!--            android:key="checkbox"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"/>-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            android:key="switch"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"/>-->
+
+
+
+<!--        <SeekBarPreference-->
+<!--            android:key="seekbar"-->
+<!--            android:title="meh"-->
+<!--            android:max="10"-->
+<!--            android:defaultValue="5"/>-->
+<!--    </PreferenceCategory>-->
+
+<!--    <PreferenceCategory-->
+<!--        android:title="meh">-->
+
+<!--        <EditTextPreference-->
+<!--            android:key="edittext"-->
+<!--            android:title="meh"-->
+<!--            app:useSimpleSummaryProvider="true"-->
+<!--            android:dialogTitle="meh"/>-->
+
+<!--        <ListPreference-->
+<!--            android:key="list"-->
+<!--            android:title="meh"-->
+<!--            app:useSimpleSummaryProvider="true"-->
+<!--            android:entries="@array/entries"-->
+<!--            android:entryValues="@array/entry_values"-->
+<!--            android:dialogTitle="meh"/>-->
+
+<!--        <MultiSelectListPreference-->
+<!--            android:key="multi_select_list"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"-->
+<!--            android:entries="@array/entries"-->
+<!--            android:entryValues="@array/entry_values"-->
+<!--            android:dialogTitle="meh"/>-->
+<!--    </PreferenceCategory>-->
+
+<!--    <PreferenceCategory-->
+<!--        android:key="advanced"-->
+<!--        android:title="meh"-->
+<!--        app:initialExpandedChildrenCount="1">-->
+
+<!--        <Preference-->
+<!--            android:key="expandable"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"/>-->
+
+<!--        <Preference-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh">-->
+
+<!--            <intent android:action="android.intent.action.VIEW"-->
+<!--                android:data="http://www.android.com"/>-->
+
+<!--        </Preference>-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            android:key="parent"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"/>-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            android:key="child"-->
+<!--            android:dependency="parent"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"/>-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            android:key="toggle_summary"-->
+<!--            android:title="meh"-->
+<!--            android:summaryOn="meh"-->
+<!--            android:summaryOff="meh"/>-->
+
+<!--        <Preference-->
+<!--            android:key="copyable"-->
+<!--            android:title="meh"-->
+<!--            android:summary="meh"-->
+<!--            android:selectable="false"-->
+<!--            app:enableCopying="true"/>-->
+<!--    </PreferenceCategory>-->
+
+</PreferenceScreen>

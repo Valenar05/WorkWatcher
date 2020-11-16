@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="entries">
+        <item>"super meh"</item>
+        <item>"mega meh""</item>
+        <item>"giga meh"</item>
+    </array>
+    <array name="entry_values">
+        <item>"no idea"</item>
+        <item>"even more no idea"</item>
+        <item>"giga no idea"</item>
+    </array>
+    <array name="break_session_entries">
+        <item>"1 minute"</item>
+        <item>"2 minutes"</item>
+        <item>"3 minutes"</item>
+        <item>"5 minutes"</item>
+        <item>"10 minutes"</item>
+        <item>"15 minutes"</item>
+        <item>"20 minutes"</item>
+        <item>"30 minutes"</item>
+    </array>
+
+    <array name="break_session_values">
+        <item>"60000"</item>
+        <item>"120000"</item>
+        <item>"180000"</item>
+        <item>"300000"</item>
+        <item>"600000"</item>
+        <item>"900000"</item>
+        <item>"1200000"</item>
+        <item>"1800000"</item>
+    </array>
+
+    <array name="work_session_entries">
+        <item>"10 minutes"</item>
+        <item>"15 minutes"</item>
+        <item>"20 minutes"</item>
+        <item>"25 minutes"</item>
+        <item>"30 minutes"</item>
+        <item>"40 minutes"</item>
+        <item>"45 minutes"</item>
+        <item>"60 minutes"</item>
+    </array>
+
+    <array name="work_session_values">
+        <item>"600000"</item>
+        <item>"900000"</item>
+        <item>"1200000"</item>
+        <item>"1500000"</item>
+        <item>"1800000"</item>
+        <item>"2400000"</item>
+        <item>"2700000"</item>
+        <item>"3600000"</item>
+    </array>
+
+</resources>

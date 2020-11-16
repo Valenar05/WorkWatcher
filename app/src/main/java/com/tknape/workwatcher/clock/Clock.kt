@@ -1,18 +1,23 @@
 package com.tknape.workwatcher.clock
 
+import android.app.Application
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.tknape.workwatcher.di.ApplicationScope
+import com.tknape.workwatcher.WorkWatcherApp
+import com.tknape.workwatcher.di.DaggerClockComponent
 
-@ApplicationScope
-class Clock {
+class Clock(application: WorkWatcherApp, val cycleHandler: CycleHandler) {
 
     lateinit var countDownTimer: CountDownTimer
-    private val cycleHandler = CycleHandler()
+//    private val cycleHandler = CycleHandler()
+
+//    @Inject
+//    lateinit var cycleHandler: CycleHandler
     var hasTimerBeenStarted = false
 
+    var initialSessionDurationInMillis: Long
 
     private val mutableTimeLeftInMillis: MutableLiveData<Long> by lazy {
         MutableLiveData<Long>()
@@ -27,14 +32,19 @@ class Clock {
     val hasTimerFinished: LiveData<Boolean> = mutableHasTimerFinished
     val timeLeftInMillis: LiveData<Long> = mutableTimeLeftInMillis
     val isTimerRunning: LiveData<Boolean> = mutableIsTimerRunning
-    var initialSessionDurationInMillis: Long = cycleHandler.getCycleLengthInMillis()
 
-    val currentSessionType: LiveData<String> = cycleHandler.currentSessionType
+    val currentSessionType: LiveData<String>
 
-    val workSessionsUntilBigBreak: LiveData<String> = cycleHandler.workSessionsUntilBigBreak
+    val workSessionsUntilBigBreak: LiveData<String>
 
     init {
+        DaggerClockComponent.builder().appComponent(application.appComponent).build()
+
+        initialSessionDurationInMillis = cycleHandler.getCycleLengthInMillis()
+        currentSessionType = cycleHandler.currentSessionType
+        workSessionsUntilBigBreak = cycleHandler.workSessionsUntilBigBreak
         createTimer()
+
     }
 
 
