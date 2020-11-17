@@ -2,7 +2,6 @@ package com.tknape.workwatcher
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations.map
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent
@@ -16,10 +15,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
     private val appComponent: AppComponent = application.appComponent
 
-    val notification: TimerNotification
+    private val notification: TimerNotification
 
     init {
-
         DaggerClockComponent.builder()
             .appComponent(appComponent)
             .build()
@@ -78,5 +76,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
     override fun skipToNextSession() {
         clock.skipToNextSession()
         sendNotification()
+    }
+
+    companion object {
+        var isSettingsScreenDisplayed = false
     }
 }

@@ -18,14 +18,11 @@ class MainActivity : DaggerAppCompatActivity() {
         setSupportActionBar(findViewById(R.id.main_activity_toolbar))
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.main_activity_toolbar)
+        val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration)
 
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -33,9 +30,17 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+
             R.id.action_settings -> {
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_content_main_to_fragment_settings)
-                true
+                if (!ClockViewModel.isSettingsScreenDisplayed) {
+
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                        .navigate(R.id.action_content_main_to_fragment_settings)
+                    return true
+                }
+                else    {
+                    super.onOptionsItemSelected(item)
+                }
             }
             else -> super.onOptionsItemSelected(item)
         }

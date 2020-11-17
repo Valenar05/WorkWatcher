@@ -41,6 +41,18 @@
             android:entryValues="@array/work_session_values"
             />
 
+        <CheckBoxPreference
+            android:key="start_next_session_automatically"
+            android:title="Continuous sessions"
+            android:summary="Automatically start the next session upon timeout"
+            />
+
+        <CheckBoxPreference
+            android:key="enable_sound_notification"
+            android:title="Enable sound notification"
+            android:summary="Plays an alarm sound when the timer finishes"
+            />
+
     </PreferenceCategory>
 
 

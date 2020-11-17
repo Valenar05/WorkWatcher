@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
-class TimerNotification(val context: Context) {
+class TimerNotification(private val context: Context) {
 
 
     private val notificationManager = NotificationManagerCompat.from(context)
@@ -49,7 +49,7 @@ class TimerNotification(val context: Context) {
         notificationManager.notify(1, notificationBuilder.build()) // TODO save ID
     }
 
-    fun cancelNotification() {
-        notificationManager.cancel(1)
-    }
+//    fun cancelNotification() {
+//        notificationManager.cancel(1)
+//    }
 }
