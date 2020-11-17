@@ -1,14 +1,14 @@
 package com.tknape.workwatcher.clock
 
-import android.app.Application
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.tknape.workwatcher.WorkWatcherApp
 import com.tknape.workwatcher.di.DaggerClockComponent
 
-class Clock(application: WorkWatcherApp, val cycleHandler: CycleHandler) {
+class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler) {
 
     lateinit var countDownTimer: CountDownTimer
 //    private val cycleHandler = CycleHandler()
@@ -147,11 +147,18 @@ class Clock(application: WorkWatcherApp, val cycleHandler: CycleHandler) {
 
             override fun onFinish() {
                 cycleHandler.switchToNextSession()
-                switchTimerRunning(false)
-                hasTimerBeenStarted = false
-                updateInitialSessionDuration()
-                setTimeLeftInMillis(initialSessionDurationInMillis)
-                mutableHasTimerFinished.value = true
+
+                if (isContinuousSessionsEnabled()) {
+                    startTimer()
+                }
+                else {
+
+                    switchTimerRunning(false)
+                    hasTimerBeenStarted = false
+                    updateInitialSessionDuration()
+                    setTimeLeftInMillis(initialSessionDurationInMillis)
+                    mutableHasTimerFinished.value = true
+                }
 //
 //                val v =
 //                   activity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
@@ -170,5 +177,11 @@ class Clock(application: WorkWatcherApp, val cycleHandler: CycleHandler) {
             }
         }
         return countDownTimer
+    }
+
+    private fun isContinuousSessionsEnabled(): Boolean {
+        return PreferenceManager
+            .getDefaultSharedPreferences(application)
+            .getBoolean("start_next_session_automatically", false)
     }
 }
