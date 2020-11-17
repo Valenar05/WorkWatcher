@@ -8,6 +8,7 @@
     <fragment
         android:id="@+id/content_main"
         android:name="com.tknape.workwatcher.ClockFragment"
+        android:label="Work Watcher"
         tools:layout="@layout/content_main"
         >
         <action
@@ -19,6 +20,7 @@
         android:id="@+id/fragment_settings"
         android:label="Settings"
         android:name="com.tknape.workwatcher.SettingsFragment"
+        tools:layout="@layout/fragment_settings"
         >
         <action
             android:id="@+id/action_fragment_settings_to_content_main"

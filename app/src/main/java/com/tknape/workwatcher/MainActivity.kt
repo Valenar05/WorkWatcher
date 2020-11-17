@@ -23,9 +23,6 @@ class MainActivity : DaggerAppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -33,9 +30,17 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+
             R.id.action_settings -> {
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_content_main_to_fragment_settings)
-                true
+                if (!ClockViewModel.isSettingsScreenDisplayed) {
+
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                        .navigate(R.id.action_content_main_to_fragment_settings)
+                    return true
+                }
+                else    {
+                    super.onOptionsItemSelected(item)
+                }
             }
             else -> super.onOptionsItemSelected(item)
         }

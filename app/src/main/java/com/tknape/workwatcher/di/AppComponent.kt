@@ -16,7 +16,6 @@ import dagger.android.AndroidInjector
         ActivityBuildersModule::class]
 )
 interface AppComponent : AndroidInjector<WorkWatcherApp> {
-//    fun clock(): Clock
     fun cycleHandler(): CycleHandler
     fun clockViewModel(): ClockViewModel
     fun application(): WorkWatcherApp

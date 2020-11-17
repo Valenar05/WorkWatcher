@@ -16,10 +16,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
     private val appComponent: AppComponent = application.appComponent
 
-    val notification: TimerNotification
+    private val notification: TimerNotification
 
     init {
-
         DaggerClockComponent.builder()
             .appComponent(appComponent)
             .build()
@@ -78,5 +77,9 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
     override fun skipToNextSession() {
         clock.skipToNextSession()
         sendNotification()
+    }
+
+    companion object {
+        var isSettingsScreenDisplayed = false
     }
 }
