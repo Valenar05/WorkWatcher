@@ -18,7 +18,7 @@ class MainActivity : DaggerAppCompatActivity() {
         setSupportActionBar(findViewById(R.id.main_activity_toolbar))
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.main_activity_toolbar)
+        val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration)
 
     }

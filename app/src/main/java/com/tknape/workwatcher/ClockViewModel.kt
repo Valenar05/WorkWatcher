@@ -2,7 +2,6 @@ package com.tknape.workwatcher
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations.map
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent

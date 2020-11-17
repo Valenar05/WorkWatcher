@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.DaggerClockComponent
 import kotlinx.android.synthetic.main.content_main.*

@@ -5,16 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
+import com.tknape.workwatcher.AlarmHandler
 import com.tknape.workwatcher.WorkWatcherApp
 import com.tknape.workwatcher.di.DaggerClockComponent
 
-class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler) {
+class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val alarmHandler: AlarmHandler) {
 
     lateinit var countDownTimer: CountDownTimer
-//    private val cycleHandler = CycleHandler()
 
-//    @Inject
-//    lateinit var cycleHandler: CycleHandler
     var hasTimerBeenStarted = false
 
     var initialSessionDurationInMillis: Long
@@ -148,6 +146,10 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler) {
             override fun onFinish() {
                 cycleHandler.switchToNextSession()
 
+                if (isSoundNotificationEnabled()) {
+                    alarmHandler.playRingtone()
+                }
+
                 if (isContinuousSessionsEnabled()) {
                     startTimer()
                 }
@@ -184,4 +186,11 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler) {
             .getDefaultSharedPreferences(application)
             .getBoolean("start_next_session_automatically", false)
     }
+
+    private fun isSoundNotificationEnabled(): Boolean {
+        return PreferenceManager
+            .getDefaultSharedPreferences(application)
+            .getBoolean("enable_sound_notification", false)
+    }
+
 }
