@@ -42,9 +42,9 @@ class TimerNotification(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setNotificationSilent()
-            .addAction(R.drawable.ic_stop, "Stop", stopPendingIntent)
-            .addAction(R.drawable.ic_stop, "Start", startPausePendingIntent)
-            .addAction(R.drawable.ic_stop, "Skip", skipPendingIntent)
+            .addAction(R.drawable.ic_stop, context.getString(R.string.stop), stopPendingIntent)
+            .addAction(R.drawable.ic_stop, context.getString(R.string.start), startPausePendingIntent)
+            .addAction(R.drawable.ic_stop, context.getString(R.string.skip), skipPendingIntent)
 
         notificationManager.notify(1, notificationBuilder.build()) // TODO save ID
     }

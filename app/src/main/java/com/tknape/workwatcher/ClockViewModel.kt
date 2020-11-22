@@ -68,7 +68,6 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
         sendNotification()
     }
 
-
     override fun isTimerRunning(): Boolean {
         return clock.isTimerRunning()
     }
