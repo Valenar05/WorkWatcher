@@ -11,6 +11,7 @@
         <item>"giga no idea"</item>
     </array>
     <array name="break_session_entries">
+<!--        <item>"5 seconds</item>-->
         <item>"1 minute"</item>
         <item>"2 minutes"</item>
         <item>"3 minutes"</item>
@@ -22,6 +23,7 @@
     </array>
 
     <array name="break_session_values">
+<!--        <item>"5000</item>-->
         <item>"60000"</item>
         <item>"120000"</item>
         <item>"180000"</item>

@@ -53,6 +53,12 @@
             android:summary="Plays an alarm sound when the timer finishes"
             />
 
+        <CheckBoxPreference
+            android:key="enable_vibration_notification"
+            android:title="Enable vibration"
+            android:summary="Enables vibration when the timer finishes"
+            />
+
     </PreferenceCategory>
 
 
