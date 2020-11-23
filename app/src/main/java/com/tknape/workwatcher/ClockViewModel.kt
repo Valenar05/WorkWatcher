@@ -3,6 +3,7 @@ package com.tknape.workwatcher
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
+import com.tknape.workwatcher.Commons.Companion.convertMillisecondsToMinutelyString
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent
 import com.tknape.workwatcher.di.DaggerClockComponent
@@ -49,7 +50,7 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
 
     val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
-        "${if (time / 60000 < 10) {"0"} else {""}}${time / 60000}:${if((time % 60000) / 1000 < 10) {"0"} else {""}}${(time % 60000) / 1000}" //TODO make string formatting more readable
+        convertMillisecondsToMinutelyString(time)
     }
 
     fun sendNotification() {

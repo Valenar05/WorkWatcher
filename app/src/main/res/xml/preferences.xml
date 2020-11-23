@@ -8,38 +8,6 @@
     <PreferenceCategory android:title="Cycle Settings">
 
         <CheckBoxPreference
-            android:key="enabledCustomCycleSettings"
-            android:title="@string/enable_custom_cycles_setting"
-            />
-
-        <DropDownPreference
-            android:key="big_break_session_length_picker"
-            android:title="@string/big_break_length_setting"
-            android:dependency="enabledCustomCycleSettings"
-            android:entries="@array/break_session_entries"
-            app:useSimpleSummaryProvider="true"
-            android:entryValues="@array/break_session_values"
-            />
-
-        <DropDownPreference
-            android:key="small_break_session_length_picker"
-            android:title="@string/small_break_length_setting"
-            android:dependency="enabledCustomCycleSettings"
-            android:entries="@array/break_session_entries"
-            app:useSimpleSummaryProvider="true"
-            android:entryValues="@array/break_session_values"
-            />
-
-        <DropDownPreference
-            android:key="work_session_length_picker"
-            android:title="@string/work_session_length_setting"
-            android:dependency="enabledCustomCycleSettings"
-            android:entries="@array/work_session_entries"
-            app:useSimpleSummaryProvider="true"
-            android:entryValues="@array/work_session_values"
-            />
-
-        <CheckBoxPreference
             android:key="start_next_session_automatically"
             android:title="@string/continuous_sessions_setting"
             android:summary="@string/continuous_sessions_setting_description"
@@ -57,8 +25,67 @@
             android:summary="@string/enable_vibration_setting_description"
             />
 
+        <CheckBoxPreference
+            android:key="enabled_custom_cycle_settings"
+            android:title="@string/enable_custom_cycles_setting"
+            />
+
+        <DropDownPreference
+            android:key="big_break_session_length_picker"
+            android:title="@string/big_break_length_setting"
+            android:dependency="enabled_custom_cycle_settings"
+            android:entries="@array/break_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/break_session_values"
+            />
+
+        <DropDownPreference
+            android:key="small_break_session_length_picker"
+            android:title="@string/small_break_length_setting"
+            android:dependency="enabled_custom_cycle_settings"
+            android:entries="@array/break_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/break_session_values"
+            />
+
+        <DropDownPreference
+            android:key="work_session_length_picker"
+            android:title="@string/work_session_length_setting"
+            android:dependency="enabled_custom_cycle_settings"
+            android:entries="@array/work_session_entries"
+            app:useSimpleSummaryProvider="true"
+            android:entryValues="@array/work_session_values"
+            />
+
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Working hours">
+
+        <CheckBoxPreference
+            android:key="enable_working_hours"
+            android:title="Enable working hours"
+            android:summary="Set your working hours, for which data for statistics should be gathered"
+            />
+
+
+        <com.tknape.workwatcher.TimePreference
+            android:key="worktime_start_time_picker"
+            android:title="Starting hour"
+            android:summary="Just testing"
+            android:defaultValue="80"
+            android:dependency="enable_working_hours"
+            />
+
+        <com.tknape.workwatcher.TimePreference
+            android:key="worktime_end_time_picker"
+            android:title="Finishing hour"
+            android:summary="Just testing"
+            android:defaultValue="160"
+            android:dependency="enable_working_hours"
+            />
+
+
+    </PreferenceCategory>
 
 <!--    <PreferenceCategory android:title="meh">-->
 
