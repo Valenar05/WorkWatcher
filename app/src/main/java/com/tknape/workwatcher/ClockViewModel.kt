@@ -3,7 +3,6 @@ package com.tknape.workwatcher
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
-import com.tknape.workwatcher.Commons.Companion.convertMillisecondsToMinutelyString
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent
 import com.tknape.workwatcher.di.DaggerClockComponent
@@ -50,13 +49,17 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
 
     val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
-        convertMillisecondsToMinutelyString(time)
+        Commons.convertMillisecondsToMinutelyString(time)
     }
 
     fun sendNotification() {
-        val timeLeftInSession = formattedTimeLeftInMillis.value!!
-        val sessionType = clock.currentSessionType.value!!
-        notification.sendNotification(timeLeftInSession, sessionType)
+        if (formattedTimeLeftInMillis.value != null) {
+            val timeLeftInSession = formattedTimeLeftInMillis.value!!
+            val sessionType = clock.currentSessionType.value!!
+            notification
+                .build(timeLeftInSession, sessionType, Commons.TIMER_NOTIFICATION_CHANNEL)
+                .send()
+        }
     }
 
     override fun startPauseClock() {

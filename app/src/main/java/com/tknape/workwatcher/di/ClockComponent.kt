@@ -13,7 +13,6 @@ interface ClockComponent {
     fun inject(clockFragment: ClockFragment)
     fun inject(timerBroadcastReceiver: TimerBroadcastReceiver)
     fun inject(clockViewModel: ClockViewModel)
-    fun inject(clock: Clock)
     fun application(): WorkWatcherApp
 
     @Component.Builder

@@ -1,6 +1,7 @@
 package com.tknape.workwatcher.di
 
 import com.tknape.workwatcher.*
+import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.clock.CycleHandler
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,17 @@ class AppModule {
     @ApplicationScope
     @Provides
     fun provideVibrationHandler(application: WorkWatcherApp) = VibrationHandler(application)
+
+    @ApplicationScope
+    @Provides
+    fun provideClock(
+        application: WorkWatcherApp,
+        cycleHandler: CycleHandler,
+        alarmHandler: AlarmHandler,
+        vibrationHandler: VibrationHandler
+    ) = Clock(
+        application,
+        cycleHandler,
+        alarmHandler,
+        vibrationHandler)
 }

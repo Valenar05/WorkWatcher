@@ -59,6 +59,7 @@
 
     </PreferenceCategory>
 
+
     <PreferenceCategory android:title="Working hours">
 
         <CheckBoxPreference
@@ -66,7 +67,6 @@
             android:title="Enable working hours"
             android:summary="Set your working hours, for which data for statistics should be gathered"
             />
-
 
         <com.tknape.workwatcher.TimePreference
             android:key="worktime_start_time_picker"
@@ -83,7 +83,6 @@
             android:defaultValue="160"
             android:dependency="enable_working_hours"
             />
-
 
     </PreferenceCategory>
 

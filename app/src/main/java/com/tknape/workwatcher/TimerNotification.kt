@@ -3,17 +3,9 @@ package com.tknape.workwatcher
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import com.tknape.workwatcher.notifications.BaseNotification
 
-class TimerNotification(private val context: Context) {
-
-
-    private val notificationManager = NotificationManagerCompat.from(context)
-
-    private val intent = Intent(context, MainActivity::class.java)
-
-    private val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+class TimerNotification(private val context: Context): BaseNotification(context) {
 
     private val stopIntent =
         Intent(context, TimerBroadcastReceiver::class.java).setAction(Commons.STOP_TIMER_ACTION)
@@ -34,19 +26,14 @@ class TimerNotification(private val context: Context) {
     private val skipPendingIntent: PendingIntent = PendingIntent.getBroadcast(context, 0, skipIntent, 0)
 
 
-    fun sendNotification(timeLeftInSession: String, sessionType: String) {
-        val notificationBuilder = NotificationCompat.Builder(context, "CHANNEL_1")
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle(timeLeftInSession)
-            .setContentText(sessionType)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setNotificationSilent()
+    override fun build(title: String, text: String, channel: String): BaseNotification {
+        super.build(title, text, channel)
+                notificationBuilder
             .addAction(R.drawable.ic_stop, context.getString(R.string.stop), stopPendingIntent)
             .addAction(R.drawable.ic_stop, context.getString(R.string.start), startPausePendingIntent)
             .addAction(R.drawable.ic_stop, context.getString(R.string.skip), skipPendingIntent)
 
-        notificationManager.notify(1, notificationBuilder.build()) // TODO save ID
+        return this
     }
 
 //    fun cancelNotification() {
