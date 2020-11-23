@@ -1,15 +1,35 @@
 <resources>
     <string name="app_name">WorkWatcher</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="stop_broadcast">WORK_WATCHER_ACTION_STOP_TIMER</string>
-    <string name="start_pause_broadcast">WORK_WATCHER_ACTION_START_PAUSE_TIMER</string>
-    <string name="skip_broadcast">WORK_WATCHER_ACTION_SKIP_TIMER</string>
+    <!--Notification strings-->
+    <string name="stop">"Stop"</string>
+    <string name="start">"Start"</string>
+    <string name="skip">"Skip"</string>
+
+    <!--    Cycle specific strings-->
+    <string name="work_session">"Work Session"</string>
+    <string name="small_break">"Break"</string>
+    <string name="big_break">"Big Break"</string>
+    <string name="four_sessions_to_big_break_message">"4 Work sessions until big break"</string>
+    <string name="three_sessions_to_big_break_message">"3 Work sessions until big break"</string>
+    <string name="two_sessions_to_big_break_message">"2 Work sessions until big break"</string>
+    <string name="one_session_to_big_break_message">"Big break coming up next!"</string>
+
+    <!--    Preferences strings-->
+    <string name="enable_custom_cycles_setting">Use custom cycle lengths</string>
+    <string name="big_break_length_setting">Big break length</string>
+    <string name="small_break_length_setting">Small break length</string>
+    <string name="work_session_length_setting">Work session length</string>
+    <string name="continuous_sessions_setting">Continuous sessions</string>
+    <string name="continuous_sessions_setting_description">Automatically start the next session upon timeout</string>
+    <string name="enable_sound_notification_setting">Enable sound notification</string>
+    <string name="enable_sound_notification_setting_description">Plays an alarm sound when the timer finishes</string>
+    <string name="enable_vibration_setting">Enable vibration</string>
+    <string name="enable_vibration_setting_description">Enables vibration when the timer finishes</string>
+
 </resources>

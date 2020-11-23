@@ -6,10 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import com.tknape.workwatcher.AlarmHandler
+import com.tknape.workwatcher.VibrationHandler
 import com.tknape.workwatcher.WorkWatcherApp
 import com.tknape.workwatcher.di.DaggerClockComponent
 
-class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val alarmHandler: AlarmHandler) {
+class Clock(
+    val application: WorkWatcherApp,
+    val cycleHandler: CycleHandler,
+    val alarmHandler: AlarmHandler,
+    val vibrationHandler: VibrationHandler
+) {
 
     lateinit var countDownTimer: CountDownTimer
 
@@ -46,7 +52,6 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
     }
 
 
-
     fun setTimeLeftInMillis(time: Long) {
         mutableTimeLeftInMillis.value = time
     }
@@ -64,17 +69,15 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
 
         if (!isTimerRunning() && hasTimerBeenStarted) {
             resumeTimer()
-            Log.d("Timer", "Resuming timer")
-        }
-        else if (isTimerRunning() && hasTimerBeenStarted) {
+            Log.d(TAG, RESUMING_TIMER)
+        } else if (isTimerRunning() && hasTimerBeenStarted) {
             pauseTimer()
-            Log.d("Timer", "Stopping timer")
-            Log.d("Timer", timeLeftInMillis.value.toString())
-        }
-        else {
+            Log.d(TAG, STOPPING_TIMER)
+            Log.d(TAG, timeLeftInMillis.value.toString())
+        } else {
             startTimer()
-            Log.d("Timer", "Starting timer")
-            Log.d("Timer", timeLeftInMillis.value.toString())
+            Log.d(TAG, STARTING_TIMER)
+            Log.d(TAG, timeLeftInMillis.value.toString())
         }
     }
 
@@ -137,7 +140,8 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
     }
 
     private fun createTimer(): CountDownTimer {
-        countDownTimer = object : CountDownTimer(timeLeftInMillis.value ?:cycleHandler.getCycleLengthInMillis(), 1000) {
+        countDownTimer = object :
+            CountDownTimer(timeLeftInMillis.value ?: cycleHandler.getCycleLengthInMillis(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 setTimeLeftInMillis(millisUntilFinished)
@@ -152,8 +156,7 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
 
                 if (isContinuousSessionsEnabled()) {
                     startTimer()
-                }
-                else {
+                } else {
 
                     switchTimerRunning(false)
                     hasTimerBeenStarted = false
@@ -161,20 +164,10 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
                     setTimeLeftInMillis(initialSessionDurationInMillis)
                     mutableHasTimerFinished.value = true
                 }
-//
-//                val v =
-//                   activity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    v!!.vibrate(
-//                        VibrationEffect.createOneShot(
-//                            500,
-//                            VibrationEffect.DEFAULT_AMPLITUDE
-//                        )
-//                    )
-//                } else {
-//                    //deprecated in API 26
-//                    v!!.vibrate(500)
-//                }
+
+                if (isVibrationNotificationEnabled()) {
+                    vibrationHandler.vibrate()
+                }
 
             }
         }
@@ -184,13 +177,29 @@ class Clock(val application: WorkWatcherApp, val cycleHandler: CycleHandler, val
     private fun isContinuousSessionsEnabled(): Boolean {
         return PreferenceManager
             .getDefaultSharedPreferences(application)
-            .getBoolean("start_next_session_automatically", false)
+            .getBoolean(START_NEXT_SESSION, false)
     }
 
     private fun isSoundNotificationEnabled(): Boolean {
         return PreferenceManager
             .getDefaultSharedPreferences(application)
-            .getBoolean("enable_sound_notification", false)
+            .getBoolean(ENABLE_SOUND, false)
+    }
+
+    private fun isVibrationNotificationEnabled(): Boolean {
+        return PreferenceManager
+            .getDefaultSharedPreferences(application)
+            .getBoolean(ENABLE_VIBRATION, false)
+    }
+
+    companion object {
+        private const val START_NEXT_SESSION = "start_next_session_automatically"
+        private const val ENABLE_SOUND = "enable_sound_notification"
+        private const val ENABLE_VIBRATION = "enable_vibration_notification"
+        private const val TAG = "Clock"
+        private const val RESUMING_TIMER = "Resuming timer"
+        private const val STOPPING_TIMER = "Stopping timer"
+        private const val STARTING_TIMER = "Starting timer"
     }
 
 }

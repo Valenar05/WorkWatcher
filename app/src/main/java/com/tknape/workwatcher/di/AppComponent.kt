@@ -19,7 +19,9 @@ interface AppComponent : AndroidInjector<WorkWatcherApp> {
     fun alarmHandler(): AlarmHandler
     fun cycleHandler(): CycleHandler
     fun clockViewModel(): ClockViewModel
+    fun vibrationHander(): VibrationHandler
     fun application(): WorkWatcherApp
+    fun inject(vibrationHandler: VibrationHandler)
 
     @Component.Builder
     interface Builder {
