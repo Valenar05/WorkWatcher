@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".TimerBroadcastReceiver" />
+        <receiver android:name=".Receiver.TimerBroadcastReceiver" />
+        <receiver android:name=".Receiver.WorkTimeBroadcastReceiver"/>
     </application>
 
 </manifest>

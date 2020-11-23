@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations.map
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent
 import com.tknape.workwatcher.di.DaggerClockComponent
+import com.tknape.workwatcher.notifications.TimerNotification
 import javax.inject.Inject
 
 class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application), IClockViewModel {
@@ -33,7 +34,6 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
                 sendNotification()
             }
         }
-
     }
 
     val isTimerRunning: LiveData<Boolean> = clock.isTimerRunning

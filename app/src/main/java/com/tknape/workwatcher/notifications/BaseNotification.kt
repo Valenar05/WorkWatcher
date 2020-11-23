@@ -8,7 +8,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.tknape.workwatcher.MainActivity
 import com.tknape.workwatcher.R
 
-abstract class BaseNotification(private val context: Context) {
+abstract class BaseNotification(val context: Context) {
 
     private val notificationManager = NotificationManagerCompat.from(context)
 
@@ -34,5 +34,4 @@ abstract class BaseNotification(private val context: Context) {
     fun send() {
         notificationManager.notify(1, notificationBuilder.build()) // TODO save ID
     }
-
 }

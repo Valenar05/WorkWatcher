@@ -1,11 +1,13 @@
-package com.tknape.workwatcher
+package com.tknape.workwatcher.notifications
 
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.tknape.workwatcher.notifications.BaseNotification
+import com.tknape.workwatcher.Commons
+import com.tknape.workwatcher.R
+import com.tknape.workwatcher.Receiver.TimerBroadcastReceiver
 
-class TimerNotification(private val context: Context): BaseNotification(context) {
+class TimerNotification(context: Context): BaseNotification(context) {
 
     private val stopIntent =
         Intent(context, TimerBroadcastReceiver::class.java).setAction(Commons.STOP_TIMER_ACTION)

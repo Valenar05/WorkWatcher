@@ -71,16 +71,14 @@
         <com.tknape.workwatcher.TimePreference
             android:key="worktime_start_time_picker"
             android:title="Starting hour"
-            android:summary="Just testing"
-            android:defaultValue="80"
+            android:defaultValue="540"
             android:dependency="enable_working_hours"
             />
 
         <com.tknape.workwatcher.TimePreference
             android:key="worktime_end_time_picker"
             android:title="Finishing hour"
-            android:summary="Just testing"
-            android:defaultValue="160"
+            android:defaultValue="1080"
             android:dependency="enable_working_hours"
             />
 

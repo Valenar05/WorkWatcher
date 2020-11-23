@@ -4,11 +4,17 @@ class Commons {
 
     companion object {
         const val ERROR = "##Error##"
+
+        // Notification messages
+
+        const val WORK_TIME_START_TIMER_ACTION = "WORK_WATCHER_START_TIMER"
+
         const val STOP_TIMER_ACTION =  "WORK_WATCHER_ACTION_STOP_TIMER"
         const val START_PAUSE_TIMER_ACTION =  "WORK_WATCHER_ACTION_START_PAUSE_TIMER"
         const val SKIP_TIMER_ACTION =  "WORK_WATCHER_ACTION_SKIP_TIMER"
 
         // Notification channels
+
         const val TIMER_NOTIFICATION_CHANNEL = "CHANNEL_1"
         const val WORKTIME_START_NOTIFICATION_CHANNEL = "CHANNEL_2"
 
