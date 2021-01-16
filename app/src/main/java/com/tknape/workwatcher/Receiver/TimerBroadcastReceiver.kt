@@ -1,8 +1,11 @@
-package com.tknape.workwatcher
+package com.tknape.workwatcher.Receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.tknape.workwatcher.ClockViewModel
+import com.tknape.workwatcher.Commons
+import com.tknape.workwatcher.WorkWatcherApp
 import com.tknape.workwatcher.di.DaggerClockComponent
 import javax.inject.Inject
 

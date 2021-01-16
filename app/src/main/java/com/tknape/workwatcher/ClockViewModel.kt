@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations.map
 import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.di.AppComponent
 import com.tknape.workwatcher.di.DaggerClockComponent
+import com.tknape.workwatcher.notifications.TimerNotification
 import javax.inject.Inject
 
 class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application), IClockViewModel {
@@ -33,7 +34,6 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
                 sendNotification()
             }
         }
-
     }
 
     val isTimerRunning: LiveData<Boolean> = clock.isTimerRunning
@@ -49,13 +49,17 @@ class ClockViewModel(application: WorkWatcherApp) : AndroidViewModel(application
 
 
     val formattedTimeLeftInMillis : LiveData<String> = map(clock.timeLeftInMillis) { time ->
-        "${if (time / 60000 < 10) {"0"} else {""}}${time / 60000}:${if((time % 60000) / 1000 < 10) {"0"} else {""}}${(time % 60000) / 1000}" //TODO make string formatting more readable
+        Commons.convertMillisecondsToMinutelyString(time)
     }
 
     fun sendNotification() {
-        val timeLeftInSession = formattedTimeLeftInMillis.value!!
-        val sessionType = clock.currentSessionType.value!!
-        notification.sendNotification(timeLeftInSession, sessionType)
+        if (formattedTimeLeftInMillis.value != null) {
+            val timeLeftInSession = formattedTimeLeftInMillis.value!!
+            val sessionType = clock.currentSessionType.value!!
+            notification
+                .build(timeLeftInSession, sessionType, Commons.TIMER_NOTIFICATION_CHANNEL)
+                .send()
+        }
     }
 
     override fun startPauseClock() {

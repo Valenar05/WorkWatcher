@@ -1,6 +1,7 @@
 package com.tknape.workwatcher.di
 
 import com.tknape.workwatcher.*
+import com.tknape.workwatcher.clock.Clock
 import com.tknape.workwatcher.clock.CycleHandler
 import dagger.BindsInstance
 import dagger.Component
@@ -21,6 +22,7 @@ interface AppComponent : AndroidInjector<WorkWatcherApp> {
     fun clockViewModel(): ClockViewModel
     fun vibrationHander(): VibrationHandler
     fun application(): WorkWatcherApp
+    fun clock(): Clock
     fun inject(vibrationHandler: VibrationHandler)
 
     @Component.Builder

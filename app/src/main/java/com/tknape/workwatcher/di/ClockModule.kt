@@ -11,19 +11,6 @@ import dagger.Provides
 @Module
 class ClockModule {
 
-    @ClockScope
-    @Provides
-    fun provideClock(
-        application: WorkWatcherApp,
-        cycleHandler: CycleHandler,
-        alarmHandler: AlarmHandler,
-        vibrationHandler: VibrationHandler
-    ) = Clock(
-        application,
-        cycleHandler,
-        alarmHandler,
-        vibrationHandler)
-
 }
 
 
